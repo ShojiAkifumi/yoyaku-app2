@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./setting/App.scss";
+import theme from "./setting/theme";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Preview from "./pages/Preview";
+import User from "./pages/User";
+import Success from "./pages/Success";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/preview" element={<Preview />} />
+                    <Route path="/user" element={<User />} />
+                    <Route path="/success" element={<Success />} />
+                </Routes>
+            </BrowserRouter>
+        </ThemeProvider>
+    );
 }
-
 export default App;
