@@ -12,14 +12,15 @@ import { auth } from "./setting/fire";
 export const Auth = React.createContext();
 
 function App() {
+	const [user] = useAuthState(auth);
 	return (
 		<ThemeProvider theme={theme}>
-			<Auth.Provider value={useAuthState(auth)}>
+			<Auth.Provider value={user}>
 				<BrowserRouter>
 					<Routes>
 						<Route path="/" element={<Home />} />
 						<Route path="/login" element={<Login />} />
-						<Route path="/user" element={<User />} />
+						<Route path="/user" element={user ? <User /> : <Home />} />
 					</Routes>
 				</BrowserRouter>
 			</Auth.Provider>

@@ -22,9 +22,8 @@ function Layout({ children }) {
 						height: "100vh",
 						overflow: "auto",
 					}}
-					id="0"
 				>
-					<Toolbar />
+					<Toolbar id="6" />
 					<Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
 						{children}
 					</Container>

@@ -42,7 +42,7 @@ export default function TopAppBar(props) {
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box sx={{ flexGrow: 1 }} id="0">
 			<AppBar position="absolute">
 				<Container maxWidth="md">
 					<Toolbar>
@@ -51,7 +51,7 @@ export default function TopAppBar(props) {
 								{props.children}
 							</Link>
 						</Typography>
-						{user[0] ? (
+						{user ? (
 							<div>
 								<IconButton
 									size="large"

@@ -1,5 +1,6 @@
 import MedicalCalendar from "../components/forms/MedicalCalendar";
 import Grid from "@mui/material/Grid";
+import Alert from "@mui/material/Alert";
 import ReserveCard from "../components/ReserveCard";
 import MedicalCountPanel from "../components/MedicalCountPanel";
 import SelectTime from "../components/forms/SelectTime";
@@ -42,6 +43,11 @@ function Home() {
 
 	return (
 		<Layout>
+			{step >= 5 && (
+				<div className="alert-wrapper">
+					<Alert severity="success">予約完了しました。</Alert>
+				</div>
+			)}
 			<Grid container spacing={3}>
 				<GridPanel>
 					<MedicalCountPanel />
@@ -77,8 +83,8 @@ function Home() {
 									setStep(1);
 								}}
 								next={() => {
-									setStep(0);
 									console.log("予約完了しました(仮)");
+									setStep(6);
 								}}
 							>
 								予約する
@@ -102,7 +108,7 @@ function Home() {
 									/>
 									{step >= 3 && (
 										<>
-											{user[0] ? (
+											{user ? (
 												setStep(4)
 											) : (
 												<AuthForm

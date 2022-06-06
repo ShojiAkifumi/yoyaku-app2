@@ -6,12 +6,15 @@ import jaLocale from "@fullcalendar/core/locales/ja";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
 function MedicalCalendar({ setStep, setDate, setselectTime }) {
-	const handleDateClick = useCallback((arg) => {
-		setStep(2);
-		const date = arg.dateStr.replace(/(.+)-(.+)-(.+)/g, "$1年$2月$3日");
-		setDate(date);
-		setselectTime("");
-	}, []);
+	const handleDateClick = useCallback(
+		(arg) => {
+			setStep(2);
+			const date = arg.dateStr.replace(/(.+)-(.+)-(.+)/g, "$1年$2月$3日");
+			setDate(date);
+			setselectTime("");
+		},
+		[setStep, setDate, setselectTime]
+	);
 	return (
 		<div>
 			<Typography variant="h4" align="center">
