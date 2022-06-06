@@ -5,23 +5,25 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Preview from "./pages/Preview";
 import User from "./pages/User";
-import Success from "./pages/Success";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "./setting/fire";
+
+export const Auth = React.createContext();
 
 function App() {
-    return (
-        <ThemeProvider theme={theme}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/preview" element={<Preview />} />
-                    <Route path="/user" element={<User />} />
-                    <Route path="/success" element={<Success />} />
-                </Routes>
-            </BrowserRouter>
-        </ThemeProvider>
-    );
+	return (
+		<ThemeProvider theme={theme}>
+			<Auth.Provider value={useAuthState(auth)}>
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<Home />} />
+						<Route path="/login" element={<Login />} />
+						<Route path="/user" element={<User />} />
+					</Routes>
+				</BrowserRouter>
+			</Auth.Provider>
+		</ThemeProvider>
+	);
 }
 export default App;
