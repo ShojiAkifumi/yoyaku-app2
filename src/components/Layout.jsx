@@ -5,10 +5,10 @@ import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import TopAppBar from "../components/TopAppBar";
 
-function Layout({ children }) {
+function Layout({ children, name }) {
 	return (
 		<>
-			<TopAppBar>ホーム</TopAppBar>
+			<TopAppBar name={name}>ホーム</TopAppBar>
 			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
 				<Box

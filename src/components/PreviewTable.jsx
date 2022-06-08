@@ -5,9 +5,9 @@ function PreviewTable({ Data }) {
 	return (
 		<Box sx={{ my: 3 }}>
 			<div className="form-field preview">
-				{Data.map(({ name, value }, index) => (
+				{Data.map(({ key, value }, index) => (
 					<dl key={index}>
-						<dt>{name}</dt>
+						<dt>{key}</dt>
 						<dd>{value}</dd>
 					</dl>
 				))}

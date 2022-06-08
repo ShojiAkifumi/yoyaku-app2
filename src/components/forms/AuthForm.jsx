@@ -12,24 +12,23 @@ import Loginform from "./Loginform";
 import UserForm from "./UserForm";
 import Buttons from "../Buttons";
 
-function AuthForm({ setStep, userData, setUserData }) {
+function AuthForm({ setStep, userData, setUserData, UserData }) {
 	const [login, setLogin] = useState(false);
-	const [name, setName] = useState("テストさん");
-	const [email, setEmail] = useState("example@mail.com");
-	const [password, setPassword] = useState("password");
-	const [bathday, setBathday] = useState("1999年9月9日");
-	const [gender, setGender] = useState("男性");
-	const [tel, setTel] = useState("123-4567");
+	const [name, setName] = UserData.name;
+	const [email, setEmail] = UserData.email;
+	const [password, setPassword] = UserData.password;
+	const [bathday, setBathday] = UserData.bathday;
+	const [gender, setGender] = UserData.gender;
+	const [tel, setTel] = UserData.tel;
 
 	const signInClick = async () => {
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
-				setUserData(userData.concat([{ name: "お名前", value: name }]));
+				setUserData(userData.concat([{ key: "お名前", value: name }]));
 				setStep(4);
 			})
 			.catch((err) => {
 				console.log(err);
-				setStep(0);
 			});
 	};
 
@@ -38,21 +37,20 @@ function AuthForm({ setStep, userData, setUserData }) {
 			.then(() => {
 				setUserData(
 					userData.concat([
-						{ name: "お名前", value: name },
+						{ key: "お名前", value: name },
 						{
-							name: "メールアドレス",
+							key: "メールアドレス",
 							value: email,
 						},
-						{ name: "生年月日", value: bathday },
-						{ name: "性別", value: gender },
-						{ name: "連絡先", value: tel },
+						{ key: "生年月日", value: bathday },
+						{ key: "性別", value: gender },
+						{ key: "連絡先", value: tel },
 					])
 				);
 				setStep(4);
 			})
 			.catch((err) => {
 				console.log(err);
-				setStep(1);
 			});
 	};
 

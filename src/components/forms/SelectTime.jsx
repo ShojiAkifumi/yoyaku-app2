@@ -19,15 +19,23 @@ const times = [
 	"17:00～",
 ];
 
-function SelectTime({ setStep, date, selectTime, setselectTime, setUserData }) {
+function SelectTime({
+	setStep,
+	date,
+	selectTime,
+	setselectTime,
+	setUserData,
+	name,
+}) {
 	const handleChange = (event) => {
 		const {
 			target: { value },
 		} = event;
 		setselectTime(value);
 		setUserData([
-			{ name: "日付", value: date },
-			{ name: "時間", value: value },
+			{ key: "お名前", value: name },
+			{ key: "日付", value: date },
+			{ key: "時間", value: value },
 		]);
 		setStep(3);
 	};

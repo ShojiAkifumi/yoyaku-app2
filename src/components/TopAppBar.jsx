@@ -14,7 +14,7 @@ import { Auth } from "../App";
 import { signOut } from "firebase/auth";
 import { auth } from "../setting/fire";
 
-export default function TopAppBar(props) {
+export default function TopAppBar({ children, name }) {
 	const user = useContext(Auth);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const navigate = useNavigate();
@@ -48,7 +48,7 @@ export default function TopAppBar(props) {
 					<Toolbar>
 						<Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
 							<Link to="/" className="topLogo">
-								{props.children}
+								{children}
 							</Link>
 						</Typography>
 						{user ? (
@@ -63,7 +63,7 @@ export default function TopAppBar(props) {
 									color="inherit"
 								>
 									<AccountCircle />
-									<span>ゲスト様</span>
+									<span>{name}様</span>
 								</IconButton>
 								<Menu
 									id="menu-appbar"
