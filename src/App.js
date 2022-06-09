@@ -20,6 +20,8 @@ function App() {
 	const [gender, setGender] = useState("");
 	const [tel, setTel] = useState("");
 
+	const [message, setMessage] = useState("");
+
 	const [user] = useAuthState(auth);
 
 	const UserData = {
@@ -53,11 +55,29 @@ function App() {
 			<Auth.Provider value={user}>
 				<BrowserRouter>
 					<Routes>
-						<Route path="/" element={<Home UserData={UserData} />} />
-						<Route path="/login" element={<Login />} />
+						<Route
+							path="/"
+							element={
+								<Home
+									UserData={UserData}
+									message={message}
+									setMessage={setMessage}
+								/>
+							}
+						/>
+						<Route
+							path="/login"
+							element={<Login UserData={UserData} setMessage={setMessage} />}
+						/>
 						<Route
 							path="/user"
-							element={user ? <User UserData={UserData} /> : <Home />}
+							element={
+								user ? (
+									<User UserData={UserData} setMessage={setMessage} />
+								) : (
+									<Home />
+								)
+							}
 						/>
 					</Routes>
 				</BrowserRouter>

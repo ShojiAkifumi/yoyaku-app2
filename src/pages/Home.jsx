@@ -1,11 +1,12 @@
 import MedicalCalendar from "../components/forms/MedicalCalendar";
 import Grid from "@mui/material/Grid";
-import Alert from "@mui/material/Alert";
+
 import ReserveCard from "../components/ReserveCard";
 import MedicalCountPanel from "../components/MedicalCountPanel";
 import SelectTime from "../components/forms/SelectTime";
 import AuthForm from "../components/forms/AuthForm";
 import { useEffect, useState, useContext } from "react";
+import Message from "../components/Message";
 import Layout from "../components/Layout";
 import GridPanel from "../components/GridPanel";
 import Buttons from "../components/Buttons";
@@ -15,11 +16,10 @@ import { Auth } from "../App";
 import { db, auth } from "../setting/fire";
 import { query, orderBy, collection, getDocs } from "firebase/firestore";
 
-function Home({ UserData }) {
+function Home({ UserData, message, setMessage }) {
 	const user = useContext(Auth);
 	const [name] = UserData.name;
-
-	const [step, setStep] = useState(0);
+	const [step, setStep] = useState(1);
 	const [date, setDate] = useState("");
 	const [selectTime, setselectTime] = useState("");
 	const [userData, setUserData] = useState([]);
@@ -65,12 +65,13 @@ function Home({ UserData }) {
 	}, [user]);
 
 	return (
-		<Layout name={name}>
-			{step >= 5 && (
-				<div className="alert-wrapper">
-					<Alert severity="success">予約完了しました。</Alert>
-				</div>
-			)}
+		<Layout
+			name={name}
+			setStep={setStep}
+			message={message}
+			setMessage={setMessage}
+		>
+			{message !== "" && <Message message={message} setMessage={setMessage} />}
 			<Grid container spacing={3}>
 				{user && (
 					<>
@@ -94,7 +95,6 @@ function Home({ UserData }) {
 						align="center"
 						color="primary"
 						sx={{ my: 5 }}
-						id="1"
 					>
 						新規予約
 					</Typography>
@@ -106,12 +106,11 @@ function Home({ UserData }) {
 							<PreviewTable Data={userData} />
 							<Buttons
 								back={() => {
-									setUserData([]);
 									setStep(1);
 								}}
 								next={() => {
-									console.log("予約完了しました(仮)");
-									setStep(6);
+									setStep(1);
+									setMessage("予約完了しました。");
 								}}
 							>
 								予約する
@@ -145,6 +144,7 @@ function Home({ UserData }) {
 													userData={userData}
 													setUserData={setUserData}
 													UserData={UserData}
+													setMessage={setMessage}
 												/>
 											)}
 										</>

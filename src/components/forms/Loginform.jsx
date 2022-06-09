@@ -3,7 +3,12 @@ import { TextField } from "@mui/material";
 
 function Loginform({ email, setEmail, password, setPassword }) {
 	return (
-		<div className="form-field">
+		<form
+			className="form-field"
+			onSubmit={(e) => {
+				e.preventDefault();
+			}}
+		>
 			<dl>
 				<dt>メールアドレス</dt>
 				<dd>
@@ -42,7 +47,7 @@ function Loginform({ email, setEmail, password, setPassword }) {
 					/>
 				</dd>
 			</dl>
-		</div>
+		</form>
 	);
 }
 

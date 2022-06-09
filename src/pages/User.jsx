@@ -4,13 +4,13 @@ import { Paper, Box } from "@mui/material";
 import AddButton from "../components/AddButton";
 import UserForm from "../components/forms/UserForm";
 
-function User({UserData}) {
-	const [name, setName] = UserData.name
-	const [email, setEmail] = UserData.email
-	const [password, setPassword] = UserData.password
-	const [bathday, setBathday] = UserData.bathday
-	const [gender, setGender] = UserData.gender
-	const [tel, setTel] = UserData.tel
+function User({ UserData, setMessage }) {
+	const [name, setName] = UserData.name;
+	const [email, setEmail] = UserData.email;
+	const [password, setPassword] = UserData.password;
+	const [bathday, setBathday] = UserData.bathday;
+	const [gender, setGender] = UserData.gender;
+	const [tel, setTel] = UserData.tel;
 
 	return (
 		<Layout>

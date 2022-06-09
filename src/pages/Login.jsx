@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Layout from "../components/Layout";
 import { auth } from "../setting/fire";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -8,17 +8,19 @@ import Loginform from "../components/forms/Loginform";
 import { useNavigate } from "react-router-dom";
 import Buttons from "../components/Buttons";
 
-function Login() {
+function Login({ UserData, setMessage }) {
 	const navigate = useNavigate();
-	const [email, setEmail] = useState("example@mail.com");
-	const [password, setPassword] = useState("password");
+	const [email, setEmail] = UserData.email;
+	const [password, setPassword] = UserData.password;
 	const signInClick = async () => {
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
+				setMessage("ログイン成功しました。");
 				navigate("/");
 			})
 			.catch((err) => {
 				console.log(err.message);
+				setMessage("ログイン失敗しました。");
 				navigate("/");
 			});
 	};

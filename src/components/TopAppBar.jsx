@@ -14,7 +14,13 @@ import { Auth } from "../App";
 import { signOut } from "firebase/auth";
 import { auth } from "../setting/fire";
 
-export default function TopAppBar({ children, name }) {
+export default function TopAppBar({
+	children,
+	name,
+	setStep,
+	message,
+	setMessage,
+}) {
 	const user = useContext(Auth);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const navigate = useNavigate();
@@ -22,7 +28,6 @@ export default function TopAppBar({ children, name }) {
 	const handleMenu = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
-
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
@@ -34,15 +39,19 @@ export default function TopAppBar({ children, name }) {
 		signOut(auth)
 			.then(() => {
 				setAnchorEl(null);
+				setStep(1);
+				setMessage("ログアウトしました。");
+				navigate("/");
 			})
 			.catch((error) => {
+				setStep(1);
 				console.log(error);
 				setAnchorEl(null);
 			});
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1 }} id="0">
+		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="absolute">
 				<Container maxWidth="md">
 					<Toolbar>

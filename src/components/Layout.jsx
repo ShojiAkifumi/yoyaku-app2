@@ -5,10 +5,12 @@ import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import TopAppBar from "../components/TopAppBar";
 
-function Layout({ children, name }) {
+function Layout({ children, name, setStep, setMessage }) {
 	return (
 		<>
-			<TopAppBar name={name}>ホーム</TopAppBar>
+			<TopAppBar name={name} setStep={setStep} setMessage={setMessage}>
+				ホーム
+			</TopAppBar>
 			<Box sx={{ display: "flex" }}>
 				<CssBaseline />
 				<Box
@@ -23,7 +25,7 @@ function Layout({ children, name }) {
 						overflow: "auto",
 					}}
 				>
-					<Toolbar id="6" />
+					<Toolbar id="1" />
 					<Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
 						{children}
 					</Container>
