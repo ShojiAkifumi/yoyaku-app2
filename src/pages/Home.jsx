@@ -14,7 +14,7 @@ import PreviewTable from "../components/PreviewTable";
 import { Typography } from "@mui/material";
 import { Auth } from "../App";
 import { db, auth } from "../setting/fire";
-import { query, orderBy, collection, getDocs } from "firebase/firestore";
+import { addDoc, query, orderBy, collection, getDocs, serverTimestamp } from "firebase/firestore";
 
 function Home({ UserData, message, setMessage }) {
 	const user = useContext(Auth);
@@ -64,6 +64,22 @@ function Home({ UserData, message, setMessage }) {
 		}
 	}, [user]);
 
+	const submitReserveData= async () => {
+		const ob = {
+			email: auth.currentUser.email,
+			reserveTime: selectTime,
+			timeStamp: serverTimestamp(),
+		};
+		await addDoc(collection(db, "ReserveData"), ob).then(()=>{
+			setStep(1);
+			setMessage("予約完了しました。");
+		}).catch((err)=>{
+			console.log(err.message);
+			setMessage("予期せぬエラーが発生しました。もう一度やり直してください。");
+
+		})
+	};
+
 	return (
 		<Layout
 			name={name}
@@ -110,6 +126,7 @@ function Home({ UserData, message, setMessage }) {
 								}}
 								next={() => {
 									setStep(1);
+									submitReserveData();
 									setMessage("予約完了しました。");
 								}}
 							>
