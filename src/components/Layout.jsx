@@ -5,10 +5,15 @@ import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import TopAppBar from "../components/TopAppBar";
 
-function Layout({ children, name, setStep, setMessage }) {
+function Layout({ children, user, name, setStep, setMessage }) {
 	return (
 		<>
-			<TopAppBar name={name} setStep={setStep} setMessage={setMessage}>
+			<TopAppBar
+				user={user}
+				name={name}
+				setStep={setStep}
+				setMessage={setMessage}
+			>
 				ホーム
 			</TopAppBar>
 			<Box sx={{ display: "flex" }}>

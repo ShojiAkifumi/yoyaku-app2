@@ -5,24 +5,24 @@ import ReserveCard from "../components/ReserveCard";
 import MedicalCountPanel from "../components/MedicalCountPanel";
 import SelectTime from "../components/forms/SelectTime";
 import AuthForm from "../components/forms/AuthForm";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import Message from "../components/Message";
 import Layout from "../components/Layout";
 import GridPanel from "../components/GridPanel";
 import Buttons from "../components/Buttons";
 import PreviewTable from "../components/PreviewTable";
 import { Typography } from "@mui/material";
-import { Auth } from "../App";
 import { db, auth } from "../setting/fire";
-import { addDoc, query, orderBy, collection, getDocs, serverTimestamp } from "firebase/firestore";
+import {
+	addDoc,
+	query,
+	orderBy,
+	collection,
+	getDocs,
+	serverTimestamp,
+} from "firebase/firestore";
 
-
-
-// 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
-
-
-function Home({ UserData, message, setMessage }) {
-	const user = useContext(Auth);
+function Home({ user, UserData, message, setMessage }) {
 	const [name] = UserData.name;
 	const [step, setStep] = useState(1);
 	const [date, setDate] = useState("");
@@ -44,22 +44,14 @@ function Home({ UserData, message, setMessage }) {
 				querySnapshot.docs.forEach((doc, index) => {
 					const data = doc.data();
 					if (data.email === auth.currentUser.email) {
-						let month = data.reserveTime.slice(4, 6);
+						let month = data.reserveTime.slice(5, 7);
 						if (month.slice(0, 1) === "0") {
 							month = month.slice(1);
 						}
 						setReserveData((ReserveData) => [
 							...ReserveData,
 							{
-								reserveTime:
-									month +
-									"月" +
-									data.reserveTime.slice(6, 8) +
-									"日 " +
-									data.reserveTime.slice(8, 10) +
-									":" +
-									data.reserveTime.slice(10, 12) +
-									"～",
+								reserveTime: month + data.reserveTime.slice(7),
 								reserveOrder: index + 1,
 							},
 						]);
@@ -69,24 +61,28 @@ function Home({ UserData, message, setMessage }) {
 		}
 	}, [user]);
 
-	const submitReserveData= async () => {
+	const submitReserveData = async () => {
 		const ob = {
 			email: auth.currentUser.email,
-			reserveTime: selectTime,
+			reserveTime: date + " " + selectTime,
 			timeStamp: serverTimestamp(),
 		};
-		await addDoc(collection(db, "ReserveData"), ob).then(()=>{
-			setStep(1);
-			setMessage("予約完了しました。");
-		}).catch((err)=>{
-			console.log(err.message);
-			setMessage("予期せぬエラーが発生しました。もう一度やり直してください。");
-
-		})
+		await addDoc(collection(db, "ReserveData"), ob)
+			.then(() => {
+				setStep(1);
+				setMessage("予約完了しました。");
+			})
+			.catch((err) => {
+				console.log(err.message);
+				setMessage(
+					"予期せぬエラーが発生しました。もう一度やり直してください。"
+				);
+			});
 	};
 
 	return (
 		<Layout
+			user={user}
 			name={name}
 			setStep={setStep}
 			message={message}
@@ -105,6 +101,7 @@ function Home({ UserData, message, setMessage }) {
 								reserveOrder={reserveOrder}
 								number={index + 1}
 								key={index}
+								setMessage={setMessage}
 							/>
 						))}
 					</>

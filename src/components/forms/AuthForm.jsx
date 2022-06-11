@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-
+import { addDoc, collection } from "firebase/firestore";
 import Typography from "@mui/material/Typography";
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../../setting/fire";
+import { db, auth } from "../../setting/fire";
 import { Box } from "@mui/material";
 import Button from "@mui/material/Button";
 import Loginform from "./Loginform";
@@ -22,6 +22,7 @@ function AuthForm({ setStep, userData, setUserData, UserData, setMessage }) {
 	const [tel, setTel] = UserData.tel;
 
 	const SetUser = () => {
+		userData["お名前"] = name;
 		return userData.concat([
 			{
 				key: "メールアドレス",
@@ -47,13 +48,32 @@ function AuthForm({ setStep, userData, setUserData, UserData, setMessage }) {
 
 	const signUpClick = async () => {
 		await createUserWithEmailAndPassword(auth, email, password)
-			.then(() => {
-				setUserData(SetUser);
-				setMessage("サインアップ成功しました。");
-				setStep(4);
+			.then(async () => {
+				const ob = {
+					name: name,
+					email: email,
+					bathday: bathday,
+					gender: gender,
+					tel: tel,
+				};
+				await addDoc(collection(db, "userData"), ob)
+					.then(() => {
+						setUserData(SetUser);
+						setMessage("サインアップ成功しました。");
+						setStep(4);
+					})
+					.catch((err) => {
+						console.log(err.message);
+						setMessage(
+							"予期せぬエラーが発生しました。もう一度やり直してください。"
+						);
+					});
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log(err.message);
+				setMessage(
+					"予期せぬエラーが発生しました。もう一度やり直してください。"
+				);
 			});
 	};
 

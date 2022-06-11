@@ -10,18 +10,17 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Container from "@mui/material/Container";
 import { Link, useNavigate } from "react-router-dom";
-import { Auth } from "../App";
 import { signOut } from "firebase/auth";
 import { auth } from "../setting/fire";
 
 export default function TopAppBar({
+	user,
 	children,
 	name,
 	setStep,
 	message,
 	setMessage,
 }) {
-	const user = useContext(Auth);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const navigate = useNavigate();
 

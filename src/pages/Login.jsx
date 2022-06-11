@@ -7,11 +7,12 @@ import Loginform from "../components/forms/Loginform";
 
 import { useNavigate } from "react-router-dom";
 import Buttons from "../components/Buttons";
+import { useState } from "react";
 
 function Login({ UserData, setMessage }) {
 	const navigate = useNavigate();
-	const [email, setEmail] = UserData.email;
-	const [password, setPassword] = UserData.password;
+	const [email, setEmail] = useState(UserData.email);
+	const [password, setPassword] = useState("");
 	const signInClick = async () => {
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
