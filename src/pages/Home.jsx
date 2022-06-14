@@ -129,6 +129,7 @@ function Home({ user, UserData, message, setMessage }) {
 								next={() => {
 									setStep(1);
 									submitReserveData();
+									setMessage("予約完了しました。");
 								}}
 							>
 								予約する
