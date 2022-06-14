@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import Typography from "@mui/material/Typography";
 import {
@@ -12,14 +12,14 @@ import Loginform from "./Loginform";
 import UserForm from "./UserForm";
 import Buttons from "../Buttons";
 
-function AuthForm({ setStep, userData, setUserData, UserData, setMessage }) {
+function AuthForm({ setStep, UserData, userData, setUserData }) {
 	const [login, setLogin] = useState(false);
-	const [name, setName] = UserData.name;
-	const [email, setEmail] = UserData.email;
-	const [password, setPassword] = UserData.password;
-	const [bathday, setBathday] = UserData.bathday;
-	const [gender, setGender] = UserData.gender;
-	const [tel, setTel] = UserData.tel;
+	const [name, setName] = useState(UserData.name);
+	const [email, setEmail] = useState(UserData.email);
+	const [password, setPassword] = useState("");
+	const [bathday, setBathday] = useState(UserData.bathday);
+	const [gender, setGender] = useState(UserData.gender);
+	const [tel, setTel] = useState(UserData.tel);
 
 	const SetUser = () => {
 		userData["お名前"] = name;
@@ -38,7 +38,7 @@ function AuthForm({ setStep, userData, setUserData, UserData, setMessage }) {
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
 				setUserData(SetUser);
-				setMessage("ログイン成功しました。");
+				// setMessage("ログイン成功しました。");
 				setStep(4);
 			})
 			.catch((err) => {
@@ -59,21 +59,21 @@ function AuthForm({ setStep, userData, setUserData, UserData, setMessage }) {
 				await addDoc(collection(db, "userData"), ob)
 					.then(() => {
 						setUserData(SetUser);
-						setMessage("サインアップ成功しました。");
+						// setMessage("サインアップ成功しました。");
 						setStep(4);
 					})
 					.catch((err) => {
 						console.log(err.message);
-						setMessage(
-							"予期せぬエラーが発生しました。もう一度やり直してください。"
-						);
+						// setMessage(
+						// 	"予期せぬエラーが発生しました。もう一度やり直してください。"
+						// );
 					});
 			})
 			.catch((err) => {
 				console.log(err.message);
-				setMessage(
-					"予期せぬエラーが発生しました。もう一度やり直してください。"
-				);
+				// setMessage(
+				// 	"予期せぬエラーが発生しました。もう一度やり直してください。"
+				// );
 			});
 	};
 

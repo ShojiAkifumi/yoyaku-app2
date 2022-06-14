@@ -6,29 +6,18 @@ import MedicalCountPanel from "../components/MedicalCountPanel";
 import SelectTime from "../components/forms/SelectTime";
 import AuthForm from "../components/forms/AuthForm";
 import { useEffect, useState } from "react";
-import Message from "../components/Message";
-import Layout from "../components/Layout";
 import GridPanel from "../components/GridPanel";
 import Buttons from "../components/Buttons";
 import PreviewTable from "../components/PreviewTable";
 import { Typography } from "@mui/material";
-import { db, auth } from "../setting/fire";
-import {
-	addDoc,
-	query,
-	orderBy,
-	collection,
-	getDocs,
-	serverTimestamp,
-} from "firebase/firestore";
+import useGetReserveData from "../components/hooks/useGetReserveData";
+import { submitReserveData } from "../components/hooks/submitReserveData";
 
-function Home({ user, UserData, message, setMessage }) {
-	const [name] = UserData.name;
+function Home({ user, UserData }) {
 	const [step, setStep] = useState(1);
 	const [date, setDate] = useState("");
 	const [selectTime, setselectTime] = useState("");
 	const [userData, setUserData] = useState([]);
-	const [ReserveData, setReserveData] = useState([]);
 	useEffect(() => {
 		document.getElementById(step).scrollIntoView({
 			behavior: "smooth",
@@ -36,145 +25,83 @@ function Home({ user, UserData, message, setMessage }) {
 		});
 	}, [step]);
 
-	useEffect(() => {
-		if (user) {
-			const usersRef = collection(db, "ReserveData");
-			const q = query(usersRef, orderBy("reserveTime"));
-			getDocs(q).then((querySnapshot) => {
-				querySnapshot.docs.forEach((doc, index) => {
-					const data = doc.data();
-					if (data.email === auth.currentUser.email) {
-						let month = data.reserveTime.slice(5, 7);
-						if (month.slice(0, 1) === "0") {
-							month = month.slice(1);
-						}
-						setReserveData((ReserveData) => [
-							...ReserveData,
-							{
-								reserveTime: month + data.reserveTime.slice(7),
-								reserveOrder: index + 1,
-							},
-						]);
-					}
-				});
-			});
-		}
-	}, [user]);
-
-	const submitReserveData = async () => {
-		const ob = {
-			email: auth.currentUser.email,
-			reserveTime: date + " " + selectTime,
-			timeStamp: serverTimestamp(),
-		};
-		await addDoc(collection(db, "ReserveData"), ob)
-			.then(() => {
-				setStep(1);
-				setMessage("予約完了しました。");
-			})
-			.catch((err) => {
-				console.log(err.message);
-				setMessage(
-					"予期せぬエラーが発生しました。もう一度やり直してください。"
-				);
-			});
-	};
+	const ReserveData = useGetReserveData(user);
 
 	return (
-		<Layout
-			user={user}
-			name={name}
-			setStep={setStep}
-			message={message}
-			setMessage={setMessage}
-		>
-			{message !== "" && <Message message={message} setMessage={setMessage} />}
-			<Grid container spacing={3}>
-				{user && (
+		<Grid container spacing={3}>
+			{user && (
+				<>
+					<GridPanel>
+						<MedicalCountPanel />
+					</GridPanel>
+					{ReserveData.map(({ reserveTime, reserveOrder }, index) => (
+						<ReserveCard
+							reserveTime={reserveTime}
+							reserveOrder={reserveOrder}
+							number={index + 1}
+							key={index}
+						/>
+					))}
+				</>
+			)}
+
+			<GridPanel>
+				<Typography variant="h2" align="center" color="primary" sx={{ my: 5 }}>
+					新規予約
+				</Typography>
+				{step >= 4 ? (
 					<>
-						<GridPanel>
-							<MedicalCountPanel />
-						</GridPanel>
-						{ReserveData.map(({ reserveTime, reserveOrder }, index) => (
-							<ReserveCard
-								reserveTime={reserveTime}
-								reserveOrder={reserveOrder}
-								number={index + 1}
-								key={index}
-								setMessage={setMessage}
-							/>
-						))}
+						<Typography variant="h4" align="center" sx={{ pt: 3 }} id="4">
+							4.予約情報確認
+						</Typography>
+						<PreviewTable Data={userData} />
+						<Buttons
+							back={() => setStep(1)}
+							next={() => {
+								setStep(1);
+								submitReserveData(date, selectTime);
+							}}
+						>
+							予約する
+						</Buttons>
+					</>
+				) : (
+					<>
+						<MedicalCalendar
+							setStep={setStep}
+							setDate={setDate}
+							setselectTime={setselectTime}
+						/>
+						{step >= 2 && (
+							<>
+								<SelectTime
+									setStep={setStep}
+									date={date}
+									selectTime={selectTime}
+									setselectTime={setselectTime}
+									setUserData={setUserData}
+								/>
+								{step >= 3 && (
+									<>
+										{user ? (
+											setStep(4)
+										) : (
+											<AuthForm
+												user={user}
+												setStep={setStep}
+												userData={userData}
+												UserData={UserData}
+												setUserData={setUserData}
+											/>
+										)}
+									</>
+								)}
+							</>
+						)}
 					</>
 				)}
-
-				<GridPanel>
-					<Typography
-						variant="h2"
-						align="center"
-						color="primary"
-						sx={{ my: 5 }}
-					>
-						新規予約
-					</Typography>
-					{step >= 4 ? (
-						<>
-							<Typography variant="h4" align="center" sx={{ pt: 3 }} id="4">
-								4.予約情報確認
-							</Typography>
-							<PreviewTable Data={userData} />
-							<Buttons
-								back={() => {
-									setStep(1);
-								}}
-								next={() => {
-									setStep(1);
-									submitReserveData();
-									setMessage("予約完了しました。");
-								}}
-							>
-								予約する
-							</Buttons>
-						</>
-					) : (
-						<>
-							<MedicalCalendar
-								setStep={setStep}
-								setDate={setDate}
-								setselectTime={setselectTime}
-							/>
-							{step >= 2 && (
-								<>
-									<SelectTime
-										setStep={setStep}
-										date={date}
-										selectTime={selectTime}
-										setselectTime={setselectTime}
-										setUserData={setUserData}
-										name={name}
-									/>
-									{step >= 3 && (
-										<>
-											{user ? (
-												setStep(4)
-											) : (
-												<AuthForm
-													user={user}
-													setStep={setStep}
-													userData={userData}
-													setUserData={setUserData}
-													UserData={UserData}
-													setMessage={setMessage}
-												/>
-											)}
-										</>
-									)}
-								</>
-							)}
-						</>
-					)}
-				</GridPanel>
-			</Grid>
-		</Layout>
+			</GridPanel>
+		</Grid>
 	);
 }
 

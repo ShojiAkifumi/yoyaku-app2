@@ -1,19 +1,13 @@
-import React from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
 import TopAppBar from "../components/TopAppBar";
 
-function Layout({ children, user, name, setStep, setMessage }) {
+function Layout({ children, user, name }) {
 	return (
 		<>
-			<TopAppBar
-				user={user}
-				name={name}
-				setStep={setStep}
-				setMessage={setMessage}
-			>
+			<TopAppBar user={user} name={name}>
 				ホーム
 			</TopAppBar>
 			<Box sx={{ display: "flex" }}>

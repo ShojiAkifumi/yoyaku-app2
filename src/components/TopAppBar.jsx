@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,14 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../setting/fire";
 
-export default function TopAppBar({
-	user,
-	children,
-	name,
-	setStep,
-	message,
-	setMessage,
-}) {
+export default function TopAppBar({ user, children, name }) {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const navigate = useNavigate();
 
@@ -38,12 +31,9 @@ export default function TopAppBar({
 		signOut(auth)
 			.then(() => {
 				setAnchorEl(null);
-				setStep(1);
-				setMessage("ログアウトしました。");
 				navigate("/");
 			})
 			.catch((error) => {
-				setStep(1);
 				console.log(error);
 				setAnchorEl(null);
 			});
